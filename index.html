@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <title>Guess Big Small</title>
+    </head>
+    <body>
+        <button id="connect">connect</button><br/>
+		<button id="addToken">add token</button><br/>
+		<button id="tokenBalance">tokenBalance</button><span id="span_tokenBalance">   span_tokenBalance</span><br/>
+		<button id="mint">mint</button><br/>
+		<button id="approve">approve</button><input type="text" id="input_spender" /><input type="text" id="input_amount" /><br/>
+        <button id="start">start</button><br/>
+        <button id="settle">settle</button><br/>
+        <button id="big">big</button><input type="text" id="input_big" /><br/>
+        <button id="small">small</button><input type="text" id="input_small" /><br/>
+        <button id="status">status</button><span id="span_status">   span_status</span><br/>
+        <button id="bigAllBalance">bigAllBalance</button><span id="span_bigAllBalance">   span_bigAllBalance</span><br/>
+        <button id="smallAllBalance">smallAllBalance</button><span id="span_smallAllBalance">   span_smallAllBalance</span><br/>
+		<button id="random">random</button><span id="span_random">   span_random</span><br/>
+        <script type="module">
+            import { ethers } from "./ethers-5.2.esm.min.js";
+            var contract_abi=[
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_token",
+				"type": "address"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "bigAddresses",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "bigAllBalance",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "bigBalances",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "getStatus",
+		"outputs": [
+			{
+				"internalType": "uint8",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "guessBig",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_amount",
+				"type": "uint256"
+			}
+		],
+		"name": "guessSMall",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "random",
+		"outputs": [
+			{
+				"internalType": "uint8",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "settle",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"name": "smallAddresses",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "smallAllBalance",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"name": "smallBalances",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "start",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "startTime",
+		"outputs": [
+			{
+				"internalType": "uint32",
+				"name": "",
+				"type": "uint32"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "started",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "token",
+		"outputs": [
+			{
+				"internalType": "contract IERC20",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	}
+]
+			var token_abi=[
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "Approval",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "previousOwner",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "OwnershipTransferred",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"internalType": "uint256",
+				"name": "value",
+				"type": "uint256"
+			}
+		],
+		"name": "Transfer",
+		"type": "event"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "owner",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			}
+		],
+		"name": "allowance",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "approve",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "account",
+				"type": "address"
+			}
+		],
+		"name": "balanceOf",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "decimals",
+		"outputs": [
+			{
+				"internalType": "uint8",
+				"name": "",
+				"type": "uint8"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "subtractedValue",
+				"type": "uint256"
+			}
+		],
+		"name": "decreaseAllowance",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "spender",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "addedValue",
+				"type": "uint256"
+			}
+		],
+		"name": "increaseAllowance",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "mint",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "name",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"internalType": "address",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "renounceOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "symbol",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "totalSupply",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "transfer",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "from",
+				"type": "address"
+			},
+			{
+				"internalType": "address",
+				"name": "to",
+				"type": "address"
+			},
+			{
+				"internalType": "uint256",
+				"name": "amount",
+				"type": "uint256"
+			}
+		],
+		"name": "transferFrom",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "newOwner",
+				"type": "address"
+			}
+		],
+		"name": "transferOwnership",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	}
+]
+			var is_connected=false;
+			var msg_address;
+			var token_address="0xD1768BB738D0Bb76E027d31D9dB3F7E29391fd32"; //rinkeby
+			var contract_address="0xC0d185a6Ce85636744Fd7330B844BEE5Eb4472de"; //rinkeby
+
+            var provider=new ethers.providers.Web3Provider(window.ethereum);
+            var signer=provider.getSigner();
+
+			var contract =new ethers.Contract(contract_address,contract_abi,provider);
+			contract=contract.connect(signer);
+
+			var token_contract =new ethers.Contract(token_address,token_abi,provider);
+			token_contract=token_contract.connect(signer);
+
+			var tokenBalance = document.getElementById("tokenBalance");
+			tokenBalance.addEventListener('click',async function(){
+				if(is_connected==true){
+					var ret_balance=await token_contract.balanceOf(msg_address);
+					span_tokenBalance.innerHTML=ret_balance;
+				}else{
+					alert("please connect the wallet");
+				}
+			})
+
+			var mint = document.getElementById("mint");
+			mint.addEventListener('click',async function(){
+				if(is_connected==true){
+					await token_contract.mint(msg_address,100);
+				}else{
+					alert("please connect the wallet");
+				}
+			})
+
+			var approve = document.getElementById("approve");
+			approve.addEventListener('click',async function(){
+				if(is_connected==true){
+					await token_contract.approve(document.getElementById("input_spender").value,document.getElementById("input_amount").value);
+				}else{
+					alert("please connect the wallet");
+				}
+			})
+
+			var connect = document.getElementById("connect");
+			connect.addEventListener('click',async function(){
+				if(window.ethereum){
+					await provider.send("eth_requestAccounts",[]);
+					msg_address= await signer.getAddress();
+					connect.innerHTML=msg_address;
+					is_connected=true;
+				}else{
+					alert("please install metamask");
+				}
+			})
+
+			var addToken = document.getElementById("addToken");
+			addToken.addEventListener('click',async function(){
+				if(is_connected==true){
+					await ethereum.request({
+						method:"wallet_watchAsset",
+						params:{
+							type:"ERC20",
+							options:{
+								address:token_address,
+								symbol:"MTK",
+								decimals:18,
+							},
+						},
+					})
+				}else{
+					alert("please connect the wallet");
+				}
+			})
+
+
+			var start = document.getElementById("start");
+			start.addEventListener('click',async function(){
+				if(is_connected==true){
+					await contract.start();
+				}else{
+					alert("please connect the wallet");
+				}
+			})
+
+			var settle = document.getElementById("settle");
+			settle.addEventListener('click',async function(){
+				if(is_connected==true){
+					await contract.settle();
+				}else{
+					alert("please connect the wallet");
+				}
+			})
+
+			var big = document.getElementById("big");
+			big.addEventListener('click',async function(){
+				if(is_connected==true){
+					await contract.guessBig(document.getElementById("input_big").value);
+				}else{
+					alert("please connect the wallet");
+				}
+			})
+
+			var small = document.getElementById("small");
+			small.addEventListener('click',async function(){
+				if(is_connected==true){
+					await contract.guessSMall(document.getElementById("input_small").value);
+				}else{
+					alert("please connect the wallet");
+				}
+			})
+
+			var status = document.getElementById("status");
+			status.addEventListener('click',async function(){
+				if(is_connected==true){
+					var ret_status=await contract.getStatus();
+					span_status.innerHTML=ret_status;
+				}else{
+					alert("please connect the wallet");
+				}
+			})
+
+			var bigAllBalance = document.getElementById("bigAllBalance");
+			bigAllBalance.addEventListener('click',async function(){
+				if(is_connected==true){
+					var ret_bigAllBalancem=await contract.bigAllBalance();
+					span_bigAllBalance.innerHTML=ret_bigAllBalancem;
+				}else{
+					alert("please connect the wallet");
+				}
+			})
+
+			var smallAllBalance = document.getElementById("smallAllBalance");
+			smallAllBalance.addEventListener('click',async function(){
+				if(is_connected==true){
+					var ret_smallAllBalance=await contract.smallAllBalance();
+					span_smallAllBalance.innerHTML=ret_smallAllBalance;
+				}else{
+					alert("please connect the wallet");
+				}
+			})
+
+
+			var random = document.getElementById("random");
+			random.addEventListener('click',async function(){
+				if(is_connected==true){
+					var ret_random=await contract.random();
+					span_random.innerHTML=ret_random;
+				}else{
+					alert("please connect the wallet");
+				}
+			})
+        </script>
+    </body>
+</html>
